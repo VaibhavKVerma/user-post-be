@@ -34,6 +34,14 @@ module.exports = () => {
         }
     });
 
+    router.get('/me', async (req, res, next) => {
+        try {
+            res.status(httpStatus.CREATED).json(Success(req.user));
+        } catch (error) {
+            next(error);
+        }
+    });
+
     router.get('/:id', async (req, res, next) => {
         try {
             const user = await userService.getUserById(req.params.id);
@@ -63,11 +71,7 @@ module.exports = () => {
 
     router.post('/:id/follow', async (req, res, next) => {
         try {
-            const userId = req.user.id;
-            if (userId === req.params.id) {
-                return next(customError('You cannot follow yourself', httpStatus.BAD_REQUEST));
-            }
-            const user = await userService.followUser(userId, req.params.id);
+            const user = await userService.followUser(req.user.id, req.params.id);
             res.status(httpStatus.OK).json(Success(user));
         } catch (error) {
             next(error);
@@ -76,11 +80,7 @@ module.exports = () => {
 
     router.post('/:id/unfollow', async (req, res, next) => {
         try {
-            const userId = req.user.id;
-            if (userId === req.params.id) {
-                return next(customError('You cannot unfollow yourself', httpStatus.BAD_REQUEST));
-            }
-            const user = await userService.unfollowUser(userId, req.params.id);
+            const user = await userService.unfollowUser(req.user.id, req.params.id);
             res.status(httpStatus.OK).json(Success(user));
         } catch (error) {
             next(error);

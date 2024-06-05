@@ -25,7 +25,7 @@ module.exports = () => {
     };
 
     const searchUser = async (name) => {
-        return User.find({ name: { $regex: name, $options: 'i' } });
+        return User.find({ name: { $regex: name, $options: 'i' }, recordStatus: 1 });
     };
 
     const followUser = async (id, followId) => {

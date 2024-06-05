@@ -13,10 +13,6 @@ const Comment = mongoose.Schema({
         type: [mongoose.Schema.Types.ObjectId],
         ref: 'User',
     },
-    dislikes: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: 'User',
-    },
     createdOn: {
         type: Date,
         default: Date.now,

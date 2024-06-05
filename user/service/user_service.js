@@ -52,6 +52,9 @@ module.exports = () => {
     };
 
     const followUser = async (id, followId) => {
+        if (id === followId) {
+            throw customError('You cannot follow yourself', httpStatus.BAD_REQUEST);
+        }
         const user = await getUserById(id);
         if (user.following.includes(followId)) {
             throw customError('Already following', httpStatus.CONFLICT);
@@ -61,6 +64,9 @@ module.exports = () => {
     };
 
     const unfollowUser = async (id, followId) => {
+        if (id === followId) {
+            throw customError('You cannot unfollow yourself', httpStatus.BAD_REQUEST);
+        }
         const user = await getUserById(id);
         if (!user.following.includes(followId)) {
             throw customError('Already Not following', httpStatus.CONFLICT);
@@ -75,7 +81,7 @@ module.exports = () => {
             throw customError('User not found', httpStatus.NOT_FOUND);
         }
         return user;
-    }
+    };
 
     return {
         createUser,

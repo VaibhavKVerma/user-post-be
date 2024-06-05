@@ -8,11 +8,11 @@ const DiscussionSchema = mongoose.Schema({
     },
     image: {
         type: String,
-        required: true,
+        default: null,
     },
     hashTags: {
         type: [String],
-        required: true,
+        default: [],
     },
     viewCount: {
         type: Number,
@@ -25,13 +25,10 @@ const DiscussionSchema = mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
+        required: true,
     },
     comments: [Comment.schema],
     likes: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: 'User',
-    },
-    dislikes: {
         type: [mongoose.Schema.Types.ObjectId],
         ref: 'User',
     },
