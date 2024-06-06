@@ -1,12 +1,14 @@
 const { Router } = require('express');
 const httpStatus = require('http-status');
 const { Success } = require('../../utils/response');
+const joiValidator = require('../../utils/joiValidator');
+const discussionValidator = require('../validator/discussion_validator');
 const discussionService = require('../service/discussion_service')();
 
 module.exports = () => {
     const router = Router();
 
-    router.post('/', async (req, res, next) => {
+    router.post('/', joiValidator(discussionValidator.createDiscussionValidator), async (req, res, next) => {
         try {
             const discussion = await discussionService.createDiscussion(req.body, req.user.id);
             res.status(httpStatus.CREATED).json(Success(discussion));
@@ -15,7 +17,7 @@ module.exports = () => {
         }
     });
 
-    router.put('/:id', async (req, res, next) => {
+    router.put('/:id', joiValidator(discussionValidator.updateDiscussionValidator), async (req, res, next) => {
         try {
             const discussion = await discussionService.updateDiscussion(req.params.id, req.body, req.user.id);
             res.status(httpStatus.OK).json(Success(discussion));
@@ -24,7 +26,7 @@ module.exports = () => {
         }
     });
 
-    router.delete('/:id', async (req, res, next) => {
+    router.delete('/:id', joiValidator(discussionValidator.deleteDiscussionValidator), async (req, res, next) => {
         try {
             const discussion = await discussionService.deleteDiscussion(req.params.id, req.user.id);
             res.status(httpStatus.OK).json(Success(discussion));
@@ -33,7 +35,7 @@ module.exports = () => {
         }
     });
 
-    router.get('/tag', async (req, res, next) => {
+    router.get('/tag', joiValidator(discussionValidator.getDiscussionsByTagValidator), async (req, res, next) => {
         try {
             const discussions = await discussionService.getDiscussionsByTag(req.query.tag);
             res.status(httpStatus.OK).json(Success(discussions));
@@ -42,7 +44,7 @@ module.exports = () => {
         }
     });
 
-    router.get('/search', async (req, res, next) => {
+    router.get('/search', joiValidator(discussionValidator.getDiscussionsByTextValidator), async (req, res, next) => {
         try {
             const discussions = await discussionService.getDiscussionsByText(req.query.text);
             res.status(httpStatus.OK).json(Success(discussions));
@@ -51,7 +53,7 @@ module.exports = () => {
         }
     });
 
-    router.get('/:id', async (req, res, next) => {
+    router.get('/:id', joiValidator(discussionValidator.getDiscussionByIdValidator), async (req, res, next) => {
         try {
             const discussions = await discussionService.getDiscussionById(req.params.id, true);
             res.status(httpStatus.OK).json(Success(discussions));
@@ -60,7 +62,7 @@ module.exports = () => {
         }
     });
 
-    router.post('/:id/like', async (req, res, next) => {
+    router.post('/:id/like', joiValidator(discussionValidator.likeDiscussionValidator), async (req, res, next) => {
         try {
             const discussion = await discussionService.likeDiscussion(req.params.id, req.user.id);
             res.status(httpStatus.OK).json(Success(discussion));
@@ -69,7 +71,7 @@ module.exports = () => {
         }
     });
 
-    router.post('/:id/unlike', async (req, res, next) => {
+    router.post('/:id/unlike', joiValidator(discussionValidator.unlikeDiscussionValidator), async (req, res, next) => {
         try {
             const discussion = await discussionService.unlikeDiscussion(req.params.id, req.user.id);
             res.status(httpStatus.OK).json(Success(discussion));
