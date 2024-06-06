@@ -28,8 +28,8 @@ module.exports = () => {
     };
 
     const updateDiscussion = async (id, discussion, userId) => {
-        const data = await getDiscussionById(id, true);
-        if (data.userId.toString() !== userId) {
+        const data = await getDiscussionById(id);
+        if (data.userId.toString() !== userId.toString()) {
             throw customError('Unauthorized', httpStatus.UNAUTHORIZED);
         }
         return discussionRepository.updateDiscussion(id, discussion);
@@ -37,7 +37,7 @@ module.exports = () => {
 
     const deleteDiscussion = async (id, userId) => {
         const discussion = await getDiscussionById(id);
-        if (discussion.userId.toString() !== userId) {
+        if (discussion.userId.toString() !== userId.toString()) {
             throw customError('Unauthorized', httpStatus.UNAUTHORIZED);
         }
         return discussionRepository.deleteDiscussion(id);

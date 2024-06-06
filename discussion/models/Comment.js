@@ -1,5 +1,20 @@
 const mongoose = require('mongoose');
 
+const replySchema = mongoose.Schema(
+    {
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: true,
+        },
+        text: {
+            type: String,
+            required: true,
+        },
+    },
+    { _id: false }
+);
+
 const Comment = mongoose.Schema({
     description: {
         type: String,
@@ -8,19 +23,19 @@ const Comment = mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
+        required: true,
     },
-    likes: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: 'User',
-    },
+    likes: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+        },
+    ],
     createdOn: {
         type: Date,
         default: Date.now,
     },
-    parentCommentId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Comment',
-    },
+    replies: [replySchema],
     recordStatus: {
         type: Number,
         default: 1,
